@@ -1,5 +1,6 @@
 ﻿using CaravanMVC.DataAccess;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CaravanMVC.Controllers
 {
@@ -16,6 +17,17 @@ namespace CaravanMVC.Controllers
 		{
 			var wagons = _context.Wagons;
 			return View(wagons);
+		}
+
+		[Route("/wagons/{id:int}")]
+		public IActionResult Show(int id)
+		{
+			var wagon = _context.Wagons
+				.Where(w => w.Id == id)
+				.Include(w => w.Passengers)
+				.FirstOrDefault();
+
+			return View(wagon);
 		}
 	}
 }
